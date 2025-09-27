@@ -3,10 +3,10 @@
 <head th:replace="~{layout :: head('Administrator')}">
 </head>
 <!--name description category country-->
-<body class="container my-5">
-    <div>
+<body th:replace="~{layout :: base(~{::section})}">
+    <section>
         <h2>발행처</h2>
-    </div>
+
     <table class="table table-striped table-hover">
         <thead class="table-dark">
         <tr>
@@ -27,6 +27,7 @@
             </tr>
         </tbody>
     </table>
+    </section>
     <div th:replace="~{layout :: bootstrap_script}"></div>
 </body>
 </html>
