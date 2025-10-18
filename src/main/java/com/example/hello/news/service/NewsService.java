@@ -127,6 +127,12 @@ public class NewsService {
         // SourceDTO ====> Source
         try{
             for(SourceDTO dto:sourceResponse.getSources()){
+                // dto의 getName()을 호출하여 발행처 이름을 구하고
+                // 발행처 이름으로 db에서 검색을 한 뒤 있으면 다음 데이터를 가져오도록 수정
+                Optional<Source> srcOpt = sourceRepository.findByName(dto.getName());
+                if(srcOpt.isPresent())
+                    continue;
+
                 Source source = new Source(); // 빈 Source Entity 인스턴스를 생성
                 source.setSid(dto.getId());
                 source.setName(dto.getName());
@@ -164,6 +170,10 @@ public class NewsService {
         // entity를 dto로 변환해서 내보내야하기 때문에 map을 사용
         // DTO로 변환하고 List형태로 내보내기.
         return sources.stream().map(Source::toDTO).toList();
+    }
+
+    public CategoryDTO updateCategory(String categoryId, String categoryName, String categoryMemo) {
+        return null;
     }
 
     // http://localhost:8090/admin/inputArticles?category=business --> AdminController(/inputArticle) -> NewsService.inputArticle

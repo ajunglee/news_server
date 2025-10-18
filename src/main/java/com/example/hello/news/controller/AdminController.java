@@ -58,6 +58,14 @@ public class AdminController {
         // @GetMapping("/category")을 다시 호출하는 것과 동일
         return "redirect:/admin/category";
     }
+    @PostMapping("/updateCategory")
+    public String updateCategory(@RequestParam("Category_Id")String categoryId,
+                                 @RequestParam("Category_Name")String categoryName,
+                                 @RequestParam("Category_Memo")String categoryMemo,
+                                 Model model){
+        newsService.updateCategory(categoryId, categoryName, categoryMemo);
+        return "redirect:/admin/category";
+    }
 
     @GetMapping("/source")
     public String getSources(Model model){

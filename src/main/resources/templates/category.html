@@ -14,12 +14,22 @@
                 <tr>
                     <th scope="col">카테고리명</th>
                     <th scope="col">메모</th>
+                    <th scope="col">기능</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="cate : ${category}">
                     <td th:text="${cate.name}"></td>
                     <td th:text="${cate.memo}"></td>
+                    <td>
+                        <button class="btn btn-outline-success">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                    </td>
                 </tr>
                 </tbody>
             </table>
