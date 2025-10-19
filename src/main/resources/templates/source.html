@@ -27,7 +27,7 @@
         </tr>
     </thead>
         <tbody>
-            <tr th:each="src : ${sources}">
+            <tr th:each="src : ${sources.content}">
                 <td>
                     <a th:href="${src.url}" th:text="${src.name}"></a>
                 </td>
