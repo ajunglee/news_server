@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +78,7 @@ public class NewsService {
         List<CategoryDTO> categoryDTOList = new ArrayList<>();
         for(Category category : categories) {
             CategoryDTO dto = new CategoryDTO();
+            dto.setId(category.getId().toString());
             dto.setName(category.getName());
             dto.setMemo(category.getMemo());
             categoryDTOList.add( dto );
@@ -149,10 +152,10 @@ public class NewsService {
 
     }
 
-    public List<SourceDTO> getSources(){
+    public Page<SourceDTO> getSources(Pageable pageable){
         // 데이터베이스로부터 Source Entity 리스트를 가져와서
         // 모든 Source Entity 인스턴스를 SourceDTO 인스턴스로 변환하여 반환한다.
-        List<Source> sources = sourceRepository.findAll();
+        Page<Source> sources = sourceRepository.findAll(pageable);
 
         // for(Source source : sources){}
         // foreach : sources에서 값을 가져와서 source의 값을 변경, 반환하지 않는다.
@@ -169,11 +172,29 @@ public class NewsService {
         // 람다식 source 매개변수 하나를 그냥 생략해서 Source::toDTO로 표시
         // entity를 dto로 변환해서 내보내야하기 때문에 map을 사용
         // DTO로 변환하고 List형태로 내보내기.
-        return sources.stream().map(Source::toDTO).toList();
+        // return sources.map(source -> {Source.toDTO(source)});
+        return sources.map(Source::toDTO);
     }
+    @Transactional
+    public void updateCategory(String categoryId, String categoryName, String categoryMemo) {
+        Category category = categoryRepository.findById(Long.parseLong(categoryId))
+                .orElseThrow(()->new RuntimeException("카테고리를 찾을 수 없습니다."));
 
-    public CategoryDTO updateCategory(String categoryId, String categoryName, String categoryMemo) {
-        return null;
+        category.setName(categoryName);
+        category.setMemo(categoryMemo);
+
+        categoryRepository.save( category );
+    }
+    @Transactional
+    public void deleteCategory(String categoryId) {
+        Category category = categoryRepository.findById(Long.parseLong(categoryId))
+                .orElseThrow(()->new RuntimeException("카테고리를 찾을 수 없습니다."));
+        try {
+            categoryRepository.delete( category );
+        } catch (Exception e) {
+            throw new RuntimeException("카테고리 데이터 삭제중에 오류가 발생했습니다.");
+        }
+
     }
 
     // http://localhost:8090/admin/inputArticles?category=business --> AdminController(/inputArticle) -> NewsService.inputArticle
