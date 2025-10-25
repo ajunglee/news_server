@@ -23,6 +23,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -197,6 +198,14 @@ public class NewsService {
 
     }
 
+    public HashMap<String, Long> getRecordCount(){
+        HashMap<String, Long> counts = new HashMap<>();
+        counts.put("articles", articleRepository.count());
+        counts.put("sources", sourceRepository.count());
+        counts.put("categories", categoryRepository.count());
+
+        return counts;
+    }
     // http://localhost:8090/admin/inputArticles?category=business --> AdminController(/inputArticle) -> NewsService.inputArticle
     // ?category=business : @Getmapping이기때문에 ? 사용
 //    @Transactional
