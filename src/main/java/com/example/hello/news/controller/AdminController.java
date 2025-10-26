@@ -26,6 +26,17 @@ import java.util.List;
 public class AdminController {
     private final NewsService newsService;
     private final ArticleService articleService;
+
+    /**
+    * 이 함수의 설명
+    * /admin/category request를 처리하기 위한 함수
+    * newsService로부터 카테고리 데이터 전체를 가져와서 model에 전달한다.
+    *
+    * @param model : 템플릿에 전달할 데이터세트(org.springframework.ui.Model)
+    * @return 카테고리 템플릿 페이지
+    *
+    **/
+
     @GetMapping("/category")
     public String categories(Model model) {
         // 데이터베이스로부터 카테고리 정보를 가져와서 admin의 category페이지에 전달한다.

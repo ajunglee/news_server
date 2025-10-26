@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,16 @@ public class NewsService {
 
 //    @Autowired
 //    private CategoryRepository categoryRepository;
+
+    public Page<ArticleDTO> getArticles(Pageable pageable) {
+        // 페이징 리퀘스트를 발행일자로 내림차순 정렬하여 만든다.
+        Pageable sorted = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC,"publishedAt"));
+
+        return articleRepository.findAll(sorted).map(Article::toDTO);
+    }
 
 
     public NewsResponse getGeneral() throws URISyntaxException, IOException, InterruptedException {

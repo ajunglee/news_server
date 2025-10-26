@@ -8,13 +8,41 @@
     <section>
         <!-- Thymeleaf 템플릿 형태, bootstrap css를 이용하여... -->
         <h2>Dashboard</h2>
-        <div>
+        <div class="dboard-contents">
             <!-- 기사 수 -->
-            <p th:text="${counts.articles}"></p>
+            <div class="dboard-box">
+                <div>
+                    <h5 class="dboard-title">기사 수</h5>
+                    <p th:text="${counts.articles}"></p>
+                </div>
+                <div class="dboard-icon">
+                    <i class="bi bi-award-fill"></i>
+                </div>
+
+            </div>
+
             <!-- 발행처 수 -->
-            <p th:text="${counts.sources}"></p>
+            <div class="dboard-box">
+                <div>
+                    <h5 class="dboard-title">발행처 수</h5>
+                    <p th:text="${counts.sources}"></p>
+                </div>
+                <div class="dboard-icon">
+                    <i class="bi bi-award-fill"></i>
+                </div>
+            </div>
+
             <!-- 카테고리 수 -->
-            <p th:text="${counts.categories}"></p>
+            <div class="dboard-box">
+                <div>
+                    <h5 class="dboard-title">카테고리 수</h5>
+                    <p th:text="${counts.categories}"></p>
+                </div>
+                <div class="dboard-icon">
+                    <i class="bi bi-award-fill"></i>
+                </div>
+            </div>
+
 
         </div>
     </section>

@@ -4,20 +4,67 @@
 </head>
 <body>
     <div class="container my-5">
-        <h1>NEWS HOME</h1>
-        <div>
-            <a class="btn btn-primary" th:href="@{/admin/category}">관리자 페이지</a>
+        <div class="mb-3">
+            <h1>NEWS Service</h1>
         </div>
-        <div th:if="${news != null}">
+
+        <div th:if="${articles.content != null}" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3"> <!--articledto목록-->
             <!-- 반복문 -->
-            <div th:each="article : ${news.articles}">
-                <div class="article-card">
-                    <h2 th:text="${article.title}"></h2>
-                    <p th:text="${article.description}"></p>
-                    <a th:href="${article.url}" target="_blank">기사 보러가기</a>
+            <div th:each="article : ${articles.content}" class="col">
+                <div class="card shadow-sm">
+                    <div class="bd-placeholder-img card-img-top" >
+                        <img class="article-img" th:src="${article.urlToImage} ? ${article.urlToImage} : @{/imgs/news.jpg}">
+                    </div>
+                    <div class="card-body">
+                        <a th:href="${article.url}" target="_blank">
+                            <p class="card-title" th:text="${article.title}">제목</p>
+                        </a>
+                        <p class="card-text" th:text="${article.description}">기사요약</p>
+                        <p class="fw-bold" th:if="${article.author} != null" th:text="'저자 : ' + ${article.author}">저자</p>
+                        <p class="fw-bold" th:unless="${article.author} != null" th:text="'저자 : unknown'">모름</p>
+                        <p class="card-text" th:text="'발행일 : ' + ${article.publishedAt}">발행일</p>
+
+                        <p class="card-source">
+                            <a th:if="${article.source.url != null}"
+                                th:href="${article.source.url}"
+                                th:text="${article.source.name}"
+                                target="_blank">발행처</a>
+
+                            <a href="#" th:unless="${article.source.url != null}" th:text="${article.source.name}">발행처</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+        <nav>
+            <ul class="pagination justify-content-center my-3">
+                <!-- 처음 -->
+                <li class="page-item" th:classappend="${articles.first} ? 'disabled'">
+                    <a class="page-link" th:href="@{/news(page=0, size=${articles.size})}">처음</a>
+                </li>
+                <!-- 이전 -->
+                <li class="page-item" th:classappend="${articles.first} ? 'disabled'">
+                    <a class="page-link" th:href="@{/news(page=${articles.number-1}, size=${articles.size})}">이전</a>
+                </li>
+                <!-- 페이지 번호(최대 10개) -->
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence((articles.number/10)*10,
+                                                    T(java.lang.Math).min((articles.number/10)*10+9, articles.totalPages-1))}"
+                    th:classappend="${articles.number == i} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/news(page=${i}, size=${articles.size})}"
+                       th:text="${i+1}">1</a>
+                </li>
+                <!-- 다음 -->
+                <li class="page-item" th:classappend="${articles.last} ? 'disabled'">
+                    <a class="page-link" th:href="@{/news(page=${articles.number+1}, size=${articles.size})}">다음</a>
+                </li>
+                <!-- 마지막 -->
+                <li class="page-item" th:classappend="${articles.last} ? 'disabled'">
+                    <a class="page-link" th:href="@{/news(page=${articles.totalPages-1}, size=${articles.size})}">마지막</a>
+                </li>
+            </ul>
+        </nav>
     </div>
     <div th:replace="~{layout :: bootstrap_script}"></div>
 </body>

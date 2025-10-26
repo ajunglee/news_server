@@ -1,6 +1,7 @@
 package com.example.hello.news.entity;
 
 import com.example.hello.news.dto.ArticleDTO;
+import com.example.hello.news.dto.SourceDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,7 +55,8 @@ public class Article {
 
     @Column(name="updated_at", insertable = false)
     private LocalDateTime updatedAt;
-
+    
+    // ArticleDTO를 이용하여 Article(Entity)를 생성하여 반환하는 함수
     public static Article fromDTO(ArticleDTO dto, Source src, Category cat){
         Article article = new Article();
 
@@ -70,6 +72,22 @@ public class Article {
         article.setContent(dto.getContent());
 
         return article;
+    }
+
+    public static ArticleDTO toDTO(Article article) {
+        ArticleDTO dto = new ArticleDTO();
+        dto.setAuthor(article.getAuthor());
+        dto.setTitle(article.getTitle());
+        dto.setUrl(article.getUrl());
+        dto.setDescription(article.getDescription());
+        dto.setUrlToImage(article.getUrlToImage());
+        dto.setPublishedAt(article.getPublishedAt());
+        dto.setContent(article.getContent());
+
+        SourceDTO srcDTO = Source.toDTO(article.getSource());
+        dto.setSource(srcDTO);
+
+        return dto;
     }
 
 }
